@@ -64,7 +64,7 @@ def load_card_image(image_path, count):
     if img is not None:
         # Create a frame for each card
         card_frame = ttk.Frame(cards_frame)
-        card_frame.grid(row=count // 8, column=count % 8, padx=10, pady=10)  # 8 cards per row
+        card_frame.grid(row=count // 10, column=count % 10, padx=10, pady=10)  # 10 cards per row
 
         # Create label to display image
         img_label = tk.Label(card_frame, image=img)
@@ -108,9 +108,9 @@ def save_action():
     try:
         with open('data.txt', 'w') as f:
             # Save the state of each checkbox
-            for var in card_vars:Develop&test
+            for var in card_vars:
                 f.write(f"{var.get()}\n")
-            # Save the completion percentage
+            # Save the completion percentage as a float on a new line
             completion_percentage = completion_label.cget("text").split(': ')[1]
             f.write(f"Completion: {completion_percentage}\n")
         print("State saved successfully.")
@@ -122,11 +122,12 @@ def load_action():
     try:
         with open('data.txt', 'r') as f:
             # Read the state of each checkbox
-            for i, line in enumerate(f):
+            lines = f.readlines()
+            for i, line in enumerate(lines[:-1]):  # Read all except the last line
                 if i < len(card_vars):
                     card_vars[i].set(int(line.strip()))  # Set checkbox state
-            # Read the completion percentage (if needed)
-            completion_line = line.strip()  # Get last line for completion
+            # Read the completion percentage (the last line)
+            completion_line = lines[-1].strip()  # Get last line for completion
             completion_label.config(text=completion_line)  # Update label
         update_completion()  # Recalculate completion percentage
         print("State loaded successfully.")
