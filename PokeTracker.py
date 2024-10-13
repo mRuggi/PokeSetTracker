@@ -133,6 +133,18 @@ def load_action():
     except Exception as e:
         print(f"Error loading state: {e}")
 
+# Function to handle mouse wheel scrolling
+def _on_mousewheel(event):
+    #LINUX HAS EVENT DELTA 0 SO WE NEED TO USE DIRECTIONS INTEGER MAPPED ON THE BUTTON-4 AND BUTTON-5
+    if(event.delta==0):
+        if(event.num==4):
+            canvas.yview_scroll(-1,"units")
+        else:
+            canvas.yview_scroll(1,"units")
+    #WINDOWS WORKS LIKE A CHARM WITH THIS
+    else:
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
 # Initialize main window
 root = tk.Tk()
 root.title("PokéSet Tracker")
@@ -200,6 +212,11 @@ canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
 
 # Add scrollbar to the canvas
 canvas.configure(yscrollcommand=scrollbar.set)
+
+# Bind mouse wheel scrolling
+canvas.bind_all("<MouseWheel>", _on_mousewheel)
+canvas.bind_all("<Button-4>", _on_mousewheel)
+canvas.bind_all("<Button-5>", _on_mousewheel)
 
 # Pack the canvas and scrollbar
 canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
