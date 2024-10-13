@@ -108,7 +108,7 @@ def save_action():
     try:
         with open('data.txt', 'w') as f:
             # Save the state of each checkbox
-            for var in card_vars:
+            for var in card_vars:Develop&test
                 f.write(f"{var.get()}\n")
             # Save the completion percentage
             completion_percentage = completion_label.cget("text").split(': ')[1]
